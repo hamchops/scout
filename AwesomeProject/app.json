@@ -26,7 +26,7 @@
       },
       "bundleIdentifier": "com.scout.www",
       "config": {
-      // "googleMapsApiKey" :
+      // "googleMapsApiKey" : 
       }
     },
     "android": {
