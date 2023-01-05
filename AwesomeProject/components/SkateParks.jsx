@@ -32,13 +32,35 @@
 // });
 
 import * as React from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Dimensions } from 'react-native'
 import MapView from 'react-native-maps'
-import { PROVIDER_GOOGLE } from 'react-native-maps'
-import { useState } from 'react'
+// import { PROVIDER_GOOGLE } from 'react-native-maps'
+import { useState, useEffect } from 'react'
+import { Marker } from 'react-native-maps'
+import axios from "axios"
+
 
 
 export default function SkateParks({navigation}) {
+    const [marker, setMarker] = useState(null)
+    
+    useEffect(() => {
+        axios({
+            method: "GET",
+            url: "http:localhost3001/api/skateparks"
+        })
+        .then((response) => {
+            setMarker(response.data.results)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+
+    }, [])
+
+    
+
+
 
     const [mapRegion, setmapRegion] = useState({
         latitude: 38.5816,
@@ -57,7 +79,20 @@ export default function SkateParks({navigation}) {
         <View style={styles.container}>
             <MapView
             style={{ alignSelf: 'stretch', height: '100%' }}
-            region={mapRegion}/>
+            region={mapRegion}>
+            {marker &&
+                markers.map((marker: any, index: number) =>(
+                    <Marker 
+                    key={index}
+                    coordinate={{
+                        latitude: marker.location[1],
+                        longitude: marker.location[0],
+                    }}
+                    tittle={marker.title}
+                    />
+                ))}
+
+            </MapView>
         </View>
 
     )
